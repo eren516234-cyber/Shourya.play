@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avoid the Blocks - Shourya Games</title>
+<style>
+    body {
+        margin: 0;
+        background: #222;
+        color: white;
+        font-family: Arial, sans-serif;
+    }
+    #gameCanvas {
+        display: block;
+        background: black;
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>
+<h1 style="text-align:center;">🛑 Avoid the Blocks</h1>
+<canvas id="gameCanvas" width="400" height="600"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let player = { x: 200, y: 550, radius: 20, color: "cyan" };
+let blocks = [];
+let score = 0;
+
+document.addEventListener("mousemove", e => {
+    let rect = canvas.getBoundingClientRect();
+    player.x = e.clientX - rect.left;
+});
+
+function spawnBlock() {
+    blocks.push({ x: Math.random() * 380, y: -20, size: 30, speed: 3 });
+}
+
+function update() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    // Player
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+    ctx.fillStyle = player.color;
+    ctx.fill();
+
+    // Blocks
+    blocks.forEach((b, i) => {
+        b.y += b.speed;
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.size/2, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+
+        if (Math.hypot(player.x - b.x, player.y - b.y) < player.radius + b.size/2) {
+            alert("Game Over! Score: " + score);
+            score = 0;
+            blocks = [];
+        }
+
+        if (b.y > 600) {
+            blocks.splice(i, 1);
+            score++;
+        }
+    });
+
+    ctx.fillStyle = "white";
+    ctx.fillText("Score: " + score, 10, 20);
+}
+
+setInterval(spawnBlock, 1000);
+setInterval(update, 20);
+</script>
+</body>
+</html>

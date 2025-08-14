@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Click Quest - Shourya Games</title>
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: white;
+        overflow: hidden;
+    }
+    h1 {
+        text-align: center;
+        margin-top: 10px;
+    }
+    #gameArea {
+        width: 100%;
+        height: calc(100vh - 60px);
+        position: relative;
+        overflow: hidden;
+    }
+    .target {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: #ff4081;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+    .target:hover {
+        transform: scale(1.2);
+    }
+    #score {
+        text-align: center;
+        font-size: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>🎯 Click Quest</h1>
+<div id="score">Score: 0</div>
+<div id="gameArea"></div>
+
+<script>
+let score = 0;
+const gameArea = document.getElementById('gameArea');
+
+function spawnTarget() {
+    const target = document.createElement('div');
+    target.classList.add('target');
+    target.style.left = Math.random() * (window.innerWidth - 60) + 'px';
+    target.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+    
+    target.addEventListener('click', () => {
+        score++;
+        document.getElementById('score').innerText = "Score: " + score;
+        target.remove();
+    });
+
+    gameArea.appendChild(target);
+    setTimeout(() => target.remove(), 2000);
+}
+
+setInterval(spawnTarget, 800);
+</script>
+</body>
+</html>
